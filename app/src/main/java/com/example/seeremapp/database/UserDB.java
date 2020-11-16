@@ -2,9 +2,12 @@ package com.example.seeremapp.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.seeremapp.MainActivity;
+import com.example.seeremapp.UserDashboardActivity;
 import com.example.seeremapp.database.containers.User;
 import com.example.seeremapp.database.helpers.UserHelper;
 
@@ -54,6 +57,11 @@ public class UserDB {
     // inserting row
     db.insert(attr.TABLE_NAME, null, values);
     db.close();
+  }
+
+  public User getLoggedUser() throws Exception {
+    String email = UserDashboardActivity.sharedPrefs.getString("email", "");
+    return getUser(email);
   }
 
   public User getUser(String email) throws Exception {

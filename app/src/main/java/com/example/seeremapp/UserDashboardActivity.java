@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,17 +20,20 @@ import android.widget.TextView;
 import com.example.seeremapp.database.containers.User;
 import com.example.seeremapp.database.UserDB;
 import com.example.seeremapp.database.WorksiteDB;
+import com.example.seeremapp.database.containers.Worksite;
 import com.example.seeremapp.fragment.UserDashboardHomeFragment;
 import com.example.seeremapp.fragment.UserProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.List;
+
 public class UserDashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+  public static SharedPreferences sharedPrefs;
+  private SharedPreferences.Editor editor;
   private LinearLayout signOut;
   private NavigationView navView;
   private Toolbar toolbar;
   private DrawerLayout drawer;
-  private SharedPreferences sharedPrefs;
-  private SharedPreferences.Editor editor;
   private UserDB userDB;
   private WorksiteDB worksiteDB;
 
@@ -60,14 +64,11 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
 
     try {
       User user = userDB.getUser(email);
-      //  worksiteDB.getUserWorksites(user);
 
       // set user details on navigation header
       View headerView = navView.getHeaderView(0);
       ((TextView) headerView.findViewById(R.id.navUsername)).setText(user.getFirstName() + " " + user.getLastName());
       ((TextView) headerView.findViewById(R.id.navEmail)).setText(user.getEmail());
-
-
     } catch(Exception err) { /* finish(); */ }
 
     // Sign out functionality
@@ -95,6 +96,7 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
     super.onStart();
     // make 'home' selected on startup and show corresponding fragment
     navView.getMenu().getItem(0).setChecked(true);
+    getSupportActionBar().setTitle("Your Dashboard");
     getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
       new UserDashboardHomeFragment()).commit();
   }
@@ -103,10 +105,12 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     switch (item.getItemId()) {
       case R.id.navHome:
+        getSupportActionBar().setTitle("Your Dashboard");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
           new UserDashboardHomeFragment()).commit();
         break;
       case R.id.navUser:
+        getSupportActionBar().setTitle("User Profile");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
           new UserProfileFragment()).commit();
         break;

@@ -3,6 +3,7 @@ package com.example.seeremapp.misc;
 import android.util.Patterns;
 import android.widget.EditText;
 
+import com.example.seeremapp.database.UserDB;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.regex.Pattern;
 
@@ -24,6 +25,10 @@ public class FormValidator {
 
     } else if (!Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
       editText.setError("Please enter a valid email address");
+      return false;
+
+    } else if (UserDB.getInstance(editText.getContext()).hasUser(input)) {
+      editText.setError("This email is already taken");
       return false;
 
     } else {

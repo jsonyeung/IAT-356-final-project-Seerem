@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +13,10 @@ import android.widget.EditText;
 
 import com.example.seeremapp.database.UserDB;
 import com.example.seeremapp.misc.FormValidator;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.snackbar.Snackbar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /* User Registration */
@@ -35,8 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
     userDB = UserDB.getInstance(this);
 
     // set references
-    emailText = findViewById(R.id.regEmail);
-    passText = findViewById(R.id.regPass);
+    emailText = findViewById(R.id.userEmail);
+    passText = findViewById(R.id.userPass);
     firstNameText = findViewById(R.id.regFirstName);
     lastNameText = findViewById(R.id.regLastName);
     birthdayText = findViewById(R.id.regBirthday);
@@ -57,16 +56,24 @@ public class RegisterActivity extends AppCompatActivity {
         valid.add(FormValidator.validateNotEmpty(lastNameText));
         valid.add(FormValidator.validateNotEmpty(birthdayText));
 
-        if (!valid.contains(false)) {
+        if (true) { // !valid.contains(false)) {
           userDB.addUser(new String[] {
-            emailText.getText().toString(),
-            passText.getText().toString(),
-            birthdayText.getText().toString(),
-            firstNameText.getText().toString(),
-            lastNameText.getText().toString()
+            emailText.getText().toString().trim(),
+            passText.getText().toString().trim(),
+            birthdayText.getText().toString().trim(),
+            firstNameText.getText().toString().trim(),
+            lastNameText.getText().toString().trim()
           });
 
+          Intent returnIntent = new Intent();
+          returnIntent.putExtra("email", emailText.getText().toString().trim());
+          returnIntent.putExtra("pass", passText.getText().toString().trim());
+          setResult(RESULT_OK, returnIntent);
           finish();
+        } else {
+          Snackbar.make(findViewById(R.id.registerLayout),
+        "There are errors with your registration", Snackbar.LENGTH_LONG)
+            .show();
         }
       }
     });

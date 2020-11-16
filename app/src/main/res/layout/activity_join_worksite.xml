@@ -27,12 +27,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Invalid account or password"
+            android:text="Invalid Invite Code"
             android:textAlignment="center"
             android:textColor="#DC4B4B" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/joinInvite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -42,7 +42,7 @@
             android:maxLength="10" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/joinButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Join" />

@@ -13,6 +13,7 @@ public class WorksiteHelper extends SQLiteOpenHelper {
   // - Worksites (wid)
   // - wid -> Roles
   // - wid -> Documents
+  // - wid -> Location
 
   /* table attributes */
   public static class Attr {
@@ -22,8 +23,12 @@ public class WorksiteHelper extends SQLiteOpenHelper {
     // Worksite attributes
     public static final String
       WID = "wid",
-      BRANCH_NAME = "branch_name",
+      COMPANY_NAME = "company_name",
+      WORKSITE_NAME = "worksite_name",
+      PROJECT_ID = "project_id",
       ADDRESS = "address",
+      ADDRESS_LAT = "address_lat",
+      ADDRESS_LONG = "address_long",
       INVITE = "invite_code";
 
     // Role attributes
@@ -32,6 +37,20 @@ public class WorksiteHelper extends SQLiteOpenHelper {
       USER_EMAIL = "user_email",
       PERMISSION = "permission",
       STATUS = "status";
+
+    // Document attributes
+    public static final String
+      // WID = "wid"
+      DOCUMENT = "document",
+      TYPE = "document_type";
+
+    // Location attributes
+    public static final String
+      // WID = "wid"
+      // USER_EMAIL = "user_email"
+      LAST_LOGGED = "last_logged",
+      LAT = "lat",
+      LONG = "long";
   }
 
   public WorksiteHelper(Context context){
@@ -45,25 +64,50 @@ public class WorksiteHelper extends SQLiteOpenHelper {
       "CREATE TABLE " +
         "worksite (" +
         Attr.WID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        Attr.BRANCH_NAME + " TEXT NOT NULL, " +
+        Attr.WORKSITE_NAME + " TEXT NOT NULL, " +
+        Attr.COMPANY_NAME + " TEXT NOT NULL, " +
+        Attr.PROJECT_ID + " TEXT NOT NULL, " +
         Attr.ADDRESS + " TEXT NOT NULL, " +
+        Attr.ADDRESS_LAT + " REAL NOT NULL, " +
+        Attr.ADDRESS_LONG + " REAL NOT NULL, " +
         Attr.INVITE + " TEXT NOT NULL UNIQUE " +
       ")";
 
     String ROLES_TABLE =
       "CREATE TABLE " +
         "role (" +
-        Attr.WID + " INTEGER NOT NULL UNIQUE, " +
+        Attr.WID + " INTEGER NOT NULL, " +
         Attr.USER_EMAIL + " TEXT NOT NULL, " +
         Attr.PERMISSION + " TEXT NOT NULL, " +
         Attr.STATUS + " TEXT NOT NULL " +
       ")";
 
+    String DOCUMENT_TABLE =
+      "CREATE TABLE " +
+        "document (" +
+        Attr.WID + " INTEGER NOT NULL, " +
+        Attr.DOCUMENT + " BLOB NOT NULL, " +
+        Attr.TYPE + " TEXT NOT NULL " +
+      ")";
+
+    String LOCATION_TABLE =
+      "CREATE TABLE " +
+        "location (" +
+          Attr.WID + " INTEGER NOT NULL, " +
+          Attr.USER_EMAIL + " TEXT NOT NULL, " +
+          Attr.LAST_LOGGED + " DATE, " +
+          Attr.LAT + " REAL NOT NULL, " +
+          Attr.LONG + " REAL NOT NULL " +
+        ")";
+
     try {
       db.execSQL(WORKSITE_TABLE);
       db.execSQL(ROLES_TABLE);
+      db.execSQL(DOCUMENT_TABLE);
+      db.execSQL(LOCATION_TABLE);
+
     } catch (SQLException err) {
-      Log.e(UserHelper.Attr.DB_NAME, "Failed to create Worksite tables");
+      Log.e(UserHelper.Attr.DB_NAME, err.getMessage());
     }
   }
 

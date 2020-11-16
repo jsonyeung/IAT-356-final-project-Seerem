@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -16,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/regEmail"
+            android:id="@+id/userEmail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="E-mail"
@@ -32,7 +33,7 @@
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/regPass"
+            android:id="@+id/userPass"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Password"
@@ -93,6 +94,7 @@
             android:id="@+id/regBirthday"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:editable="true"
             android:focusable="false"
             android:hint="Birthday"
             android:singleLine="true" />
@@ -111,7 +113,8 @@
             android:layout_height="match_parent"
             android:hint="10-digit Invite Code (Optional)"
             android:inputType="textCapCharacters"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:visibility="gone" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

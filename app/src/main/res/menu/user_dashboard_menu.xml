@@ -13,8 +13,8 @@
             android:icon="@drawable/ic_user"
             android:title="User Profile"/>
 
-        <item android:id="@+id/navSettings"
-            android:icon="@drawable/ic_settings"
-            android:title="Settings"/>
+<!--        <item android:id="@+id/navSettings"-->
+<!--            android:icon="@drawable/ic_settings"-->
+<!--            android:title="Settings"/>-->
     </group>
 </menu>

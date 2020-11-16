@@ -1,5 +1,6 @@
 package com.example.seeremapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.seeremapp.database.containers.User;
 import com.example.seeremapp.database.UserDB;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
   private SharedPreferences sharedPrefs;
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
   private CheckBox rememberCheck;
   private Button loginButton;
   private UserDB userDB;
+
+  private static int LAUNCH_REGISTER = 1;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
       Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-      startActivity(i);
+      startActivityForResult(i, LAUNCH_REGISTER);
       }
     });
   }
@@ -94,6 +98,24 @@ public class MainActivity extends AppCompatActivity {
     if (sharedPrefs.getBoolean("remember", false)) {
       setLoginDetails();
       loginButton.performClick();
+    }
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == LAUNCH_REGISTER) {
+      if (resultCode == RESULT_OK){
+        Snackbar.make(findViewById(R.id.mainLayout),
+          "Account successfully created!", Snackbar.LENGTH_LONG)
+            .show();
+
+        editor.putString("email", data.getStringExtra("email"));
+        editor.putString("pass", data.getStringExtra("pass"));
+        editor.commit();
+        setLoginDetails();
+      }
     }
   }
 
