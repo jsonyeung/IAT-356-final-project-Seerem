@@ -42,6 +42,7 @@ public class WorksiteHelper extends SQLiteOpenHelper {
     public static final String
       // WID = "wid"
       DOCUMENT = "document",
+      DOCUMENT_NAME = "document_name",
       TYPE = "document_type";
 
     // Location attributes
@@ -86,8 +87,9 @@ public class WorksiteHelper extends SQLiteOpenHelper {
       "CREATE TABLE " +
         "document (" +
         Attr.WID + " INTEGER NOT NULL, " +
-        Attr.DOCUMENT + " BLOB NOT NULL, " +
-        Attr.TYPE + " TEXT NOT NULL " +
+        Attr.DOCUMENT + " TEXT NOT NULL, " +
+        Attr.TYPE + " TEXT NOT NULL, " +
+        Attr.DOCUMENT_NAME + " TEXT " +
       ")";
 
     String LOCATION_TABLE =

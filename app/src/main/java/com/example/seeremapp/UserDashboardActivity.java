@@ -1,30 +1,36 @@
 package com.example.seeremapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import droidninja.filepicker.FilePickerConst;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.seeremapp.database.containers.User;
 import com.example.seeremapp.database.UserDB;
 import com.example.seeremapp.database.WorksiteDB;
 import com.example.seeremapp.database.containers.Worksite;
+import com.example.seeremapp.database.helpers.UserHelper;
 import com.example.seeremapp.fragment.UserDashboardHomeFragment;
 import com.example.seeremapp.fragment.UserProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +42,9 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
   private DrawerLayout drawer;
   private UserDB userDB;
   private WorksiteDB worksiteDB;
+  private String email;
+
+  private boolean change = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +69,7 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
 
     // get account details & login
     sharedPrefs = getSharedPreferences("USER", Context.MODE_PRIVATE);
-    String email = sharedPrefs.getString("email", "");
+    email = sharedPrefs.getString("email", "");
 
     try {
       User user = userDB.getUser(email);
@@ -95,10 +104,8 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
   protected void onStart() {
     super.onStart();
     // make 'home' selected on startup and show corresponding fragment
-    navView.getMenu().getItem(0).setChecked(true);
-    getSupportActionBar().setTitle("Your Dashboard");
-    getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
-      new UserDashboardHomeFragment()).commit();
+    if (!change) onNavigationItemSelected(navView.getMenu().findItem(R.id.navHome));
+    else onNavigationItemSelected(navView.getMenu().findItem(R.id.navUser));
   }
 
   @Override
@@ -112,7 +119,7 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
       case R.id.navUser:
         getSupportActionBar().setTitle("User Profile");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
-          new UserProfileFragment()).commit();
+          new UserProfileFragment(email, true)).commit();
         break;
       default: break;
     }
@@ -126,5 +133,29 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
     if (drawer.isDrawerOpen(GravityCompat.START))
       drawer.closeDrawer(GravityCompat.START);
     else super.onBackPressed();
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    switch (requestCode) {
+      case 98:
+        change = true;
+        if (resultCode == RESULT_OK && data != null) {
+          List<Uri> photoPaths = new ArrayList<>();
+          photoPaths.addAll(data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
+          userDB.editUser(email, UserHelper.Attr.AVATAR, photoPaths.get(0).toString());
+        }
+        break;
+      case 99: //FilePickerConst.REQUEST_CODE_PHOTO:
+        change = true;
+        if (resultCode == RESULT_OK && data != null) {
+          List<Uri> photoPaths = new ArrayList<>();
+          photoPaths.addAll(data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
+          userDB.editUser(email, UserHelper.Attr.DRIVERS_LICENSE, photoPaths.get(0).toString());
+        }
+        break;
+    }
   }
 }

@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         valid.add(FormValidator.validateNotEmpty(lastNameText));
         valid.add(FormValidator.validateNotEmpty(birthdayText));
 
-        if (true) { // !valid.contains(false)) {
+        if (!valid.contains(false)) {
           userDB.addUser(new String[] {
             emailText.getText().toString().trim(),
             passText.getText().toString().trim(),

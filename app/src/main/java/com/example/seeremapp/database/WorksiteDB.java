@@ -7,11 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.seeremapp.R;
+import com.example.seeremapp.database.containers.Document;
 import com.example.seeremapp.database.containers.User;
 import com.example.seeremapp.database.containers.Worksite;
 import com.example.seeremapp.database.helpers.WorksiteHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -130,6 +132,69 @@ public class WorksiteDB {
     return false;
   }
 
+  public boolean deleteWorksite(int wid) {
+    db = helper.getWritableDatabase();
+    boolean res = db.delete("worksite", attr.WID + " = " + wid, null) > 0;
+    db.close();
+    return res;
+  }
+
+  public boolean leaveWorksite(int wid) {
+    try {
+      UserDB userDB = UserDB.getInstance(context);
+      User user = userDB.getLoggedUser();
+      db = helper.getWritableDatabase();
+      boolean res = db.delete("role", attr.WID + " = " + wid + " AND " + attr.USER_EMAIL + " = '" + user.getEmail() + "'", null) > 0;
+      db.close();
+      return res;
+    } catch (Exception err) {
+      Log.e("Worksite", err.getMessage());
+    }
+
+    return false;
+  }
+
+  /* Documents */
+  public void addDocument(int wid, String path, String type, String name) {
+    db = helper.getWritableDatabase();
+
+    ContentValues values = new ContentValues();
+    values.put(attr.WID, wid);
+    values.put(attr.DOCUMENT_NAME, name);
+    values.put(attr.DOCUMENT, path);
+    values.put(attr.TYPE, type);
+    db.insert("document", null, values);
+    db.close();
+  }
+
+  public boolean deleteDocument(int wid, String path) {
+    db = helper.getWritableDatabase();
+    boolean res = db.delete("document", attr.DOCUMENT + " = '" + path + "';", null) > 0;
+    db.close();
+    return res;
+  }
+
+  /* Locations */
+  public void addLocation(int wid, String lastLogged, double lat, double longitude) {
+    try {
+      db = helper.getReadableDatabase();
+      UserDB userDB = UserDB.getInstance(context);
+      User user = userDB.getLoggedUser();
+
+      ContentValues values = new ContentValues();
+      values.put(attr.WID, wid);
+      values.put(attr.USER_EMAIL, user.getEmail());
+      values.put(attr.LAST_LOGGED, lastLogged);
+      values.put(attr.LAT, lat);
+      values.put(attr.LONG, longitude);
+      db.insert("location", null, values);
+      db.close();
+
+    } catch (Exception err) {
+      Log.e("Worksite", err.getMessage());
+    }
+  }
+
   /* Getters */
   public List<Worksite> getUserWorksites() {
     List<Worksite> worksites = new ArrayList<Worksite>();
@@ -234,5 +299,37 @@ public class WorksiteDB {
     }
 
     return "WORKER";
+  }
+
+  public List<Document> getWorksiteDocuments(int wid) {
+    List<Document> docs = new ArrayList<>();
+
+    try {
+      db = helper.getReadableDatabase();
+      String query =
+        "SELECT * " +
+          "FROM document D " +
+          "WHERE D.wid = " + wid + ";";
+
+      Cursor cursor = db.rawQuery(query, null);
+
+      cursor.moveToFirst();
+      Log.i("test", "count " + cursor.getCount());
+      if (cursor.getCount() <= 0) return docs;
+      do {
+        Document doc = new Document();
+        doc.setId(cursor.getInt(cursor.getColumnIndex(attr.WID)));
+        doc.setPath(cursor.getString(cursor.getColumnIndex(attr.DOCUMENT)));
+        doc.setName(cursor.getString(cursor.getColumnIndex(attr.DOCUMENT_NAME)));
+        doc.setType(cursor.getString(cursor.getColumnIndex(attr.TYPE)));
+        docs.add(doc);
+      } while (cursor.moveToNext());
+
+      db.close();
+    } catch (Exception err) {
+      Log.e("Worksite", err.getMessage());
+    }
+
+    return docs;
   }
 }

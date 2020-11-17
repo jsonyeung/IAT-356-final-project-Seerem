@@ -7,67 +7,81 @@
     tools:context=".fragment.WorksiteDashboardFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="12dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="12dp">
-
-        <TextView
-            android:id="@+id/currentWorksite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Worksite"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/currentProjectId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Project ID" />
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/worksiteMap"
-            android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="12dp"
-            android:visibility="visible" />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="8dp"
-                android:text="DOCUMENTS &amp; LINKS"
-                android:textAlignment="textStart"
-                android:textColor="#121212"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/addDocumentLink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Document / Link"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/locationList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/currentWorksite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Worksite"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/currentProjectId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Project ID" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/worksiteMap"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="12dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="8dp"
+                    android:text="DOCUMENTS &amp; LINKS"
+                    android:textAlignment="textStart"
+                    android:textColor="#121212"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/documentView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/addDocument"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Document"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/addLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add URL"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/addPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Photo"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -80,14 +94,18 @@
                 android:textColor="#121212"
                 android:textStyle="bold" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/locationView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/pingLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ping Location" />
+
         </LinearLayout>
-
-        <Button
-            android:id="@+id/pingLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ping Location" />
-
-    </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

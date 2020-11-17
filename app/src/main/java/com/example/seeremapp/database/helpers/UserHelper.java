@@ -22,7 +22,11 @@ public class UserHelper extends SQLiteOpenHelper {
       PASSWORD = "password",
       FIRST_NAME = "first_name",
       LAST_NAME = "last_name",
-      BIRTHDAY = "birthday";
+      BIRTHDAY = "birthday",
+      PHONE = "phone",
+      EMERGENCY_PHONE = "emergency_phone",
+      DRIVERS_LICENSE = "driver_license",
+      AVATAR = "avatar";
   }
 
   public UserHelper(Context context){
@@ -40,7 +44,11 @@ public class UserHelper extends SQLiteOpenHelper {
         Attr.PASSWORD + " TEXT NOT NULL, " +
         Attr.FIRST_NAME + " TEXT," +
         Attr.LAST_NAME + " TEXT," +
-        Attr.BIRTHDAY + " TEXT " +
+        Attr.BIRTHDAY + " TEXT, " +
+        Attr.PHONE + " TEXT, " +
+        Attr.EMERGENCY_PHONE + " TEXT, " +
+        Attr.DRIVERS_LICENSE + " TEXT, " +
+        Attr.AVATAR + " TEXT " +
       ")";
 
     try {

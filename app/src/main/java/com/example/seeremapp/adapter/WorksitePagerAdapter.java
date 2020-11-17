@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
  */
 public class WorksitePagerAdapter extends FragmentPagerAdapter {
 
-  private static final String[] TAB_TITLES = {"Details", "Users", "Settings"};
+  private static final String[] TAB_TITLES = {"Details", "Users", "Other"};
   private final Context mContext;
   private int wid;
 

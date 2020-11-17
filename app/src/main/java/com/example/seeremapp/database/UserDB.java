@@ -35,6 +35,10 @@ public class UserDB {
     user.setFirstName(cursor.getString((cursor.getColumnIndex(attr.FIRST_NAME))));
     user.setLastName(cursor.getString((cursor.getColumnIndex(attr.LAST_NAME))));
     user.setBirthday(cursor.getString(cursor.getColumnIndex(attr.BIRTHDAY)));
+    user.setPhone(cursor.getString(cursor.getColumnIndex(attr.PHONE)));
+    user.setEmergencyPhone(cursor.getString(cursor.getColumnIndex(attr.EMERGENCY_PHONE)));
+    user.setAvatar(cursor.getString(cursor.getColumnIndex(attr.AVATAR)));
+    user.setDriversLicense(cursor.getString(cursor.getColumnIndex(attr.DRIVERS_LICENSE)));
     return user;
   }
 
@@ -56,6 +60,15 @@ public class UserDB {
 
     // inserting row
     db.insert(attr.TABLE_NAME, null, values);
+    db.close();
+  }
+
+  public void editUser(String email, String attri, String value) {
+    db = helper.getWritableDatabase();
+
+    ContentValues values = new ContentValues();
+    values.put(attri, value);
+    db.update(attr.TABLE_NAME, values, attr.EMAIL + " = '" + email + "'", null);
     db.close();
   }
 

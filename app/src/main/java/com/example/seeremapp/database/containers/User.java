@@ -5,7 +5,7 @@ import android.database.Cursor;
 public class User {
   private int id;
   private String email, password;
-  private String firstName, lastName, birthday;
+  private String firstName, lastName, birthday, phone, emergencyPhone, avatar, driversLicense;
 
   public int getId() {
     return id;
@@ -53,5 +53,37 @@ public class User {
 
   public void setBirthday(String birthday) {
     this.birthday = birthday;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public String getEmergencyPhone() {
+    return emergencyPhone;
+  }
+
+  public void setEmergencyPhone(String emergencyPhone) {
+    this.emergencyPhone = emergencyPhone;
+  }
+
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
+  }
+
+  public String getDriversLicense() {
+    return driversLicense;
+  }
+
+  public void setDriversLicense(String driversLicense) {
+    this.driversLicense = driversLicense;
   }
 }
