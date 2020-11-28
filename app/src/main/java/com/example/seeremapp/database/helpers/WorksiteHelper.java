@@ -29,14 +29,16 @@ public class WorksiteHelper extends SQLiteOpenHelper {
       ADDRESS = "address",
       ADDRESS_LAT = "address_lat",
       ADDRESS_LONG = "address_long",
-      INVITE = "invite_code";
+      INVITE = "invite_code",
+      REQUIRES_VERIFY = "requires_verification";
 
     // Role attributes
     public static final String
       // WID = "wid"
       USER_EMAIL = "user_email",
-      PERMISSION = "permission",
-      STATUS = "status";
+      ROLE = "role",
+      STATUS = "status",
+      VERIFIED = "verified";
 
     // Document attributes
     public static final String
@@ -51,7 +53,17 @@ public class WorksiteHelper extends SQLiteOpenHelper {
       // USER_EMAIL = "user_email"
       LAST_LOGGED = "last_logged",
       LAT = "lat",
-      LONG = "long";
+      LONG = "long",
+      STEPS = "steps";
+
+    // Chatroom attributes
+    public static final String
+      // WID = "wid"
+      // USER_EMAIL = "user_email"
+      // ROLE = "role",
+      NAME = "name",
+      MESSAGE = "message",
+      MESSAGE_DATE = "message_date";
   }
 
   public WorksiteHelper(Context context){
@@ -71,7 +83,8 @@ public class WorksiteHelper extends SQLiteOpenHelper {
         Attr.ADDRESS + " TEXT NOT NULL, " +
         Attr.ADDRESS_LAT + " REAL NOT NULL, " +
         Attr.ADDRESS_LONG + " REAL NOT NULL, " +
-        Attr.INVITE + " TEXT NOT NULL UNIQUE " +
+        Attr.INVITE + " TEXT NOT NULL UNIQUE, " +
+        Attr.REQUIRES_VERIFY + " INTEGER NOT NULL " +
       ")";
 
     String ROLES_TABLE =
@@ -79,8 +92,9 @@ public class WorksiteHelper extends SQLiteOpenHelper {
         "role (" +
         Attr.WID + " INTEGER NOT NULL, " +
         Attr.USER_EMAIL + " TEXT NOT NULL, " +
-        Attr.PERMISSION + " TEXT NOT NULL, " +
-        Attr.STATUS + " TEXT NOT NULL " +
+        Attr.ROLE + " TEXT NOT NULL, " +
+        Attr.STATUS + " TEXT NOT NULL, " +
+        Attr.VERIFIED + " INTEGER NOT NULL " +
       ")";
 
     String DOCUMENT_TABLE =
@@ -99,14 +113,27 @@ public class WorksiteHelper extends SQLiteOpenHelper {
           Attr.USER_EMAIL + " TEXT NOT NULL, " +
           Attr.LAST_LOGGED + " DATE, " +
           Attr.LAT + " REAL NOT NULL, " +
-          Attr.LONG + " REAL NOT NULL " +
+          Attr.LONG + " REAL NOT NULL, " +
+          Attr.STEPS + " INTEGER " +
         ")";
+
+    String CHAT_TABLE =
+      "CREATE TABLE " +
+        "chat (" +
+        Attr.WID + " INTEGER NOT NULL, " +
+        Attr.NAME + " TEXT NOT NULL, " +
+        Attr.USER_EMAIL + " TEXT NOT NULL, " +
+        Attr.ROLE + " TEXT NOT NULL, " +
+        Attr.MESSAGE + " TEXT, " +
+        Attr.MESSAGE_DATE + " DATE NOT NULL " +
+      ")";
 
     try {
       db.execSQL(WORKSITE_TABLE);
       db.execSQL(ROLES_TABLE);
       db.execSQL(DOCUMENT_TABLE);
       db.execSQL(LOCATION_TABLE);
+      db.execSQL(CHAT_TABLE);
 
     } catch (SQLException err) {
       Log.e(UserHelper.Attr.DB_NAME, err.getMessage());

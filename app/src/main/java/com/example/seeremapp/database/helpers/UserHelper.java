@@ -26,7 +26,10 @@ public class UserHelper extends SQLiteOpenHelper {
       PHONE = "phone",
       EMERGENCY_PHONE = "emergency_phone",
       DRIVERS_LICENSE = "driver_license",
-      AVATAR = "avatar";
+      AVATAR = "avatar",
+
+      // settings
+      FINGER_AUTH = "finger_auth";
   }
 
   public UserHelper(Context context){
@@ -48,7 +51,8 @@ public class UserHelper extends SQLiteOpenHelper {
         Attr.PHONE + " TEXT, " +
         Attr.EMERGENCY_PHONE + " TEXT, " +
         Attr.DRIVERS_LICENSE + " TEXT, " +
-        Attr.AVATAR + " TEXT " +
+        Attr.AVATAR + " TEXT, " +
+        Attr.FINGER_AUTH + " INTEGER " +
       ")";
 
     try {

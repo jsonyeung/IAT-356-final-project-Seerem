@@ -19,8 +19,9 @@ import com.example.seeremapp.PingActivity;
 import com.example.seeremapp.R;
 import com.example.seeremapp.WorksiteDashboardActivity;
 import com.example.seeremapp.adapter.DocumentAdapter;
-import com.example.seeremapp.adapter.WorksiteAdapter;
+import com.example.seeremapp.adapter.LocationAdapter;
 import com.example.seeremapp.database.WorksiteDB;
+import com.example.seeremapp.database.containers.Location;
 import com.example.seeremapp.database.containers.Worksite;
 import com.example.seeremapp.misc.AddLinkActivity;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +29,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,21 +73,29 @@ public class WorksiteDashboardFragment extends Fragment {
 
     TextView worksiteName = (TextView) view.findViewById(R.id.currentWorksite);
     TextView projectId = (TextView) view.findViewById(R.id.currentProjectId);
+
+    String curRole = worksiteDB.getLoggedUserRole(worksite.getId());
     RecyclerView documentView = view.findViewById(R.id.documentView);
     RecyclerView.Adapter documentAdapter = new DocumentAdapter(getContext(),
-            worksiteDB.getWorksiteDocuments(worksite.getId()),
-            worksiteDB.getUserRole(worksite.getId())
+      worksiteDB.getWorksiteDocuments(worksite.getId()),
+      curRole
     );
     RecyclerView.LayoutManager documentLayoutManager = new LinearLayoutManager(getContext());
+    documentView.setLayoutManager(documentLayoutManager);
+    documentView.setAdapter(documentAdapter);
+
+    List<Location> locations = worksiteDB.getWorksiteLocations(worksite.getId(), curRole.equals("WORKER"));
+
+    RecyclerView locationView = view.findViewById(R.id.locationView);
+    RecyclerView.Adapter locationAdapter = new LocationAdapter(getContext(), locations);
+    RecyclerView.LayoutManager locationLayoutManager = new LinearLayoutManager(getContext());
+    locationView.setLayoutManager(locationLayoutManager);
+    locationView.setAdapter(locationAdapter);
 
     Button addDocs = view.findViewById(R.id.addDocument);
-    Button addPhoto = view.findViewById(R.id.addPhoto);
     Button addLink = view.findViewById(R.id.addLink);
     Button pinger = view.findViewById(R.id.pingLocation);
     MapView mapView = view.findViewById(R.id.worksiteMap);
-
-    documentView.setLayoutManager(documentLayoutManager);
-    documentView.setAdapter(documentAdapter);
 
     // set values
     worksiteName.setText("Worksite: " + worksite.getWorksiteName());
@@ -135,15 +146,12 @@ public class WorksiteDashboardFragment extends Fragment {
     });
 
     // show/hide certain elements depending on user's role
-    String role = worksiteDB.getUserRole(worksite.getId());
+    String role = worksiteDB.getLoggedUserRole(worksite.getId());
     switch (role) {
       case "ADMIN":
         (view.findViewById(R.id.addDocument)).setVisibility(View.VISIBLE);
-        // (view.findViewById(R.id.addPhoto)).setVisibility(View.VISIBLE);
         (view.findViewById(R.id.addLink)).setVisibility(View.VISIBLE);
-        (view.findViewById(R.id.locationList)).setVisibility(View.VISIBLE);
         break;
-      default: break;
     }
 
     // Inflate the layout for this fragment

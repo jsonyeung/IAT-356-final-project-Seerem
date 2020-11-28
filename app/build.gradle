@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.seeremapp"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -40,6 +40,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.droidninja:filepicker:2.2.4'
     implementation 'com.schibstedspain.android:leku:8.0.0'
+    implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
+    implementation 'com.github.kenglxn.QRGen:android:2.6.0'
+    implementation 'me.aflak.libraries:fingerprint:2.5.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
     testImplementation 'junit:junit:4.12'

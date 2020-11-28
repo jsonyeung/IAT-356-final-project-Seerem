@@ -118,7 +118,7 @@ public class WorksiteDashboardActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                   String docName = input.getText().toString().trim();
-                  worksiteDB.addDocument(worksite.getId(), docPaths.get(0).getPath(), "DOC", docName);
+                  worksiteDB.addDocument(worksite.getId(), docPaths.get(0).toString(), "DOC", docName);
                   recreate();
                 }
               });
@@ -146,10 +146,11 @@ public class WorksiteDashboardActivity extends AppCompatActivity {
           case REQUEST_PING:
             double lat = data.getDoubleExtra("lat", 0.0);
             double longitude = data.getDoubleExtra("longitude", 0.0);
+            int steps = data.getIntExtra("steps", 0);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             String today = formatter.format(new Date());
 
-            worksiteDB.addLocation(worksite.getId(), today, lat, longitude);
+            worksiteDB.addLocation(worksite.getId(), today, lat, longitude, steps);
             Log.i("test", "lat " + lat + ", long: " + longitude);
             Toast.makeText(this, "new ping added", Toast.LENGTH_SHORT).show();
             recreate();

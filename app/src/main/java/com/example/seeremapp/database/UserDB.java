@@ -39,6 +39,7 @@ public class UserDB {
     user.setEmergencyPhone(cursor.getString(cursor.getColumnIndex(attr.EMERGENCY_PHONE)));
     user.setAvatar(cursor.getString(cursor.getColumnIndex(attr.AVATAR)));
     user.setDriversLicense(cursor.getString(cursor.getColumnIndex(attr.DRIVERS_LICENSE)));
+    user.setFingerAuth(Integer.parseInt(cursor.getString(cursor.getColumnIndex(attr.FINGER_AUTH))));
     return user;
   }
 
@@ -57,6 +58,7 @@ public class UserDB {
     values.put(attr.BIRTHDAY, params[2]);
     values.put(attr.FIRST_NAME, params[3]);
     values.put(attr.LAST_NAME, params[4]);
+    values.put(attr.FINGER_AUTH, 0);
 
     // inserting row
     db.insert(attr.TABLE_NAME, null, values);

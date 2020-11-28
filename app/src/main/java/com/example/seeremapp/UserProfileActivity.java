@@ -2,7 +2,7 @@ package com.example.seeremapp;
 
 import android.os.Bundle;
 
-import com.example.seeremapp.fragment.UserProfileFragment;
+import com.example.seeremapp.fragment.UserDashboardProfileFragment;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +20,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     String email = getIntent().getStringExtra("email");
     getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
-        new UserProfileFragment(email, false)).commit();
+        new UserDashboardProfileFragment(email, false)).commit();
   }
 }

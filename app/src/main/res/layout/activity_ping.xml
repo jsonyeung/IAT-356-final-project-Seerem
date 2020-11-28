@@ -9,10 +9,17 @@
     tools:context=".PingActivity">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:text="Your Location is being tracked:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/locationVals"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
         android:text="Location (Lat, Long): (0, 0)"
         android:textSize="20sp" />
 

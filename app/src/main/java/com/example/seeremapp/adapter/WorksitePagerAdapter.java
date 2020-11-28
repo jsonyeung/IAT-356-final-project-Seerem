@@ -2,6 +2,7 @@ package com.example.seeremapp.adapter;
 
 import android.content.Context;
 
+import com.example.seeremapp.fragment.WorksiteDashboardChatFragment;
 import com.example.seeremapp.fragment.WorksiteDashboardFragment;
 import com.example.seeremapp.fragment.WorksiteDashboardSettingsFragment;
 import com.example.seeremapp.fragment.WorksiteDashboardUsersFragment;
@@ -17,7 +18,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
  */
 public class WorksitePagerAdapter extends FragmentPagerAdapter {
 
-  private static final String[] TAB_TITLES = {"Details", "Users", "Other"};
+  private static final String[] TAB_TITLES = {"Details", "Users", "Chat", "Options"};
   private final Context mContext;
   private int wid;
 
@@ -40,6 +41,9 @@ public class WorksitePagerAdapter extends FragmentPagerAdapter {
         fragment = WorksiteDashboardUsersFragment.newInstance(wid);
         break;
       case 2:
+        fragment = WorksiteDashboardChatFragment.newInstance(wid);
+        break;
+      case 3:
         fragment = WorksiteDashboardSettingsFragment.newInstance(wid);
         break;
     }
@@ -55,6 +59,6 @@ public class WorksitePagerAdapter extends FragmentPagerAdapter {
 
   @Override
   public int getCount() {
-    return 3;
+    return 4;
   }
 }

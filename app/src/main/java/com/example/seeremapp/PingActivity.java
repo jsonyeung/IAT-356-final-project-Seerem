@@ -17,6 +17,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,7 +36,7 @@ public class PingActivity extends AppCompatActivity implements SensorEventListen
   private SensorManager sensorManager;
   private Sensor mStepCounter;
   private boolean isCounterSensorPresent;
-  private int stepCount = 0;
+  private int stepCount = 0, curSteps = 0;
   private double lat = 0.0D, longitude = 0.0D;
 
   private TextView stepCounter, locationVals;
@@ -54,7 +55,7 @@ public class PingActivity extends AppCompatActivity implements SensorEventListen
 
     sharedPreferences = getSharedPreferences("LOCATION", Context.MODE_PRIVATE);
     editor = sharedPreferences.edit();
-    stepCount = 0;
+    stepCount = sharedPreferences.getInt("steps", 0);
 
     // set references
     stepCounter = findViewById(R.id.stepCounter);
@@ -68,6 +69,7 @@ public class PingActivity extends AppCompatActivity implements SensorEventListen
         Intent i = new Intent();
         i.putExtra("lat", lat);
         i.putExtra("longitude", longitude);
+        i.putExtra("steps", curSteps);
         setResult(RESULT_OK, i);
         finish();
       }
@@ -107,6 +109,13 @@ public class PingActivity extends AppCompatActivity implements SensorEventListen
   }
 
   @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    editor.putInt("steps", stepCount);
+    editor.commit();
+  }
+
+  @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -143,8 +152,9 @@ public class PingActivity extends AppCompatActivity implements SensorEventListen
   @Override
   public void onSensorChanged(SensorEvent sensorEvent) {
     if (sensorEvent.sensor == mStepCounter) {
-      int steps = (int) sensorEvent.values[0];
-      stepCounter.setText("Steps: " + stepCount++);
+      stepCount = (int) sensorEvent.values[0];
+      stepCounter.setText("Steps: " + curSteps);
+      curSteps += 1;
     }
   }
 

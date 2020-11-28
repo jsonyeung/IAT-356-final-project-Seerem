@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.seeremapp.R;
 import com.example.seeremapp.WorksiteDashboardActivity;
+import com.example.seeremapp.database.WorksiteDB;
 import com.example.seeremapp.database.containers.Worksite;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class WorksiteAdapter extends RecyclerView.Adapter<WorksiteAdapter.ViewHolder> {
+  private WorksiteDB worksiteDB;
   private List<Worksite> mData;
   private LayoutInflater mInflater;
 
@@ -24,6 +26,7 @@ public class WorksiteAdapter extends RecyclerView.Adapter<WorksiteAdapter.ViewHo
   public WorksiteAdapter(Context context, List<Worksite> data) {
     this.mInflater = LayoutInflater.from(context);
     this.mData = data;
+    worksiteDB = WorksiteDB.getInstance(context);
   }
 
   // inflates the row layout from xml when needed
@@ -40,15 +43,23 @@ public class WorksiteAdapter extends RecyclerView.Adapter<WorksiteAdapter.ViewHo
     holder.heading.setText(worksite.getCompany() + " — " + worksite.getWorksiteName());
     holder.caption.setText(worksite.getAddress());
 
-    holder.itemView.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Context context = view.getContext();
-        Intent i = new Intent(context, WorksiteDashboardActivity.class);
-        i.putExtra("wid", worksite.getId());
-        context.startActivity(i);
-      }
-    });
+    if (!worksiteDB.checkLoggedVerified(worksite.getId())) {
+      holder.status.setText("AWAITING VERIFY");
+      holder.status.setVisibility(View.VISIBLE);
+      holder.itemView.setAlpha(0.4f);
+
+
+    } else {
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          Context context = view.getContext();
+          Intent i = new Intent(context, WorksiteDashboardActivity.class);
+          i.putExtra("wid", worksite.getId());
+          context.startActivity(i);
+        }
+      });
+    }
   }
 
   // total number of rows
@@ -59,7 +70,7 @@ public class WorksiteAdapter extends RecyclerView.Adapter<WorksiteAdapter.ViewHo
 
   // stores and recycles views as they are scrolled off screen
   public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    TextView heading, caption;
+    TextView heading, caption, status;
     ImageView avatar;
 
     ViewHolder(View itemView) {
@@ -67,6 +78,7 @@ public class WorksiteAdapter extends RecyclerView.Adapter<WorksiteAdapter.ViewHo
       heading = itemView.findViewById(R.id.heading);
       caption = itemView.findViewById(R.id.caption);
       avatar = itemView.findViewById(R.id.avatar);
+      status = itemView.findViewById(R.id.status);
 
       avatar.setVisibility(View.GONE);
       itemView.setOnClickListener(this);

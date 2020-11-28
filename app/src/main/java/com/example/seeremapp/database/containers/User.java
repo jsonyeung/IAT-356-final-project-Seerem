@@ -3,7 +3,7 @@ package com.example.seeremapp.database.containers;
 import android.database.Cursor;
 
 public class User {
-  private int id;
+  private int id, fingerAuth;
   private String email, password;
   private String firstName, lastName, birthday, phone, emergencyPhone, avatar, driversLicense;
 
@@ -13,6 +13,14 @@ public class User {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public int getFingerAuth() {
+    return fingerAuth;
+  }
+
+  public void setFingerAuth(int fingerAuth) {
+    this.fingerAuth = fingerAuth;
   }
 
   public String getEmail() {

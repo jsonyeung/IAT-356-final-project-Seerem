@@ -1,9 +1,17 @@
 package com.example.seeremapp.database.containers;
 
 public class Worksite {
-  private int id;
+  private int id, requiresVerify;
   private String company, worksiteName, projectId, address, inviteCode;
   private double lat;
+
+  public int getRequiresVerify() {
+    return requiresVerify;
+  }
+
+  public void setRequiresVerify(int requiresVerify) {
+    this.requiresVerify = requiresVerify;
+  }
 
   public double getLat() {
     return lat;

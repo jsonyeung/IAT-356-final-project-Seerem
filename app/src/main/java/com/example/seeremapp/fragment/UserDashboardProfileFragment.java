@@ -2,15 +2,12 @@ package com.example.seeremapp.fragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +21,8 @@ import com.example.seeremapp.R;
 import com.example.seeremapp.database.UserDB;
 import com.example.seeremapp.database.WorksiteDB;
 import com.example.seeremapp.database.containers.User;
-import com.example.seeremapp.database.containers.Worksite;
 import com.example.seeremapp.database.helpers.UserHelper;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URI;
 import java.util.Calendar;
 
 import androidx.annotation.NonNull;
@@ -39,7 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import droidninja.filepicker.FilePickerBuilder;
 
-public class UserProfileFragment extends Fragment {
+public class UserDashboardProfileFragment extends Fragment {
   private String email;
   private boolean edit = false;
   private View view;
@@ -47,14 +38,14 @@ public class UserProfileFragment extends Fragment {
   private DatePickerDialog datePicker;
   private DatePickerDialog.OnDateSetListener datePickerListener;
 
-  public UserProfileFragment(String user_email, boolean edit) {
+  public UserDashboardProfileFragment(String user_email, boolean edit) {
     email = user_email;
     this.edit = edit;
   }
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    view = (View) inflater.inflate(R.layout.fragment_user_profile, container, false);
+    view = (View) inflater.inflate(R.layout.fragment_user_dashboard_profile, container, false);
     displayUserInfo(view);
     return view;
   }
@@ -79,8 +70,8 @@ public class UserProfileFragment extends Fragment {
       profileFirstName.setText(user.getFirstName());
       profileLastName.setText(user.getLastName());
       profileBirthday.setText(user.getBirthday());
-      profilePhone.setText("Phone: " + ((user.getPhone() == null) ? "-" : user.getPhone()));
-      profileEmergencyPhone.setText("Emergency Phone: " + ((user.getEmergencyPhone() == null) ? "-" : user.getEmergencyPhone()));
+      profilePhone.setText(((user.getPhone() == null) ? "-" : user.getPhone()));
+      profileEmergencyPhone.setText("Emergency: " + ((user.getEmergencyPhone() == null) ? "-" : user.getEmergencyPhone()));
       setImage(profileDrivers, user.getDriversLicense());
 
 

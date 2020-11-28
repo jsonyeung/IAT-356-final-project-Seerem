@@ -2,11 +2,11 @@ package com.example.seeremapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.seeremapp.CreateWorksiteActivity;
 import com.example.seeremapp.JoinWorksiteActivity;
@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class UserDashboardHomeFragment extends Fragment {
   private Button joinWorksiteButton, createWorksiteButton;
+  private LinearLayout emptyLayout;
   private RecyclerView worksiteView;
   private RecyclerView.Adapter worksiteAdapter;
   private RecyclerView.LayoutManager worksiteLayoutManager;
@@ -43,6 +44,10 @@ public class UserDashboardHomeFragment extends Fragment {
     // set references
     joinWorksiteButton = view.findViewById(R.id.worksiteJoin);
     createWorksiteButton = view.findViewById(R.id.worksiteCreate);
+    emptyLayout = view.findViewById(R.id.emptyLayout);
+
+    if (worksites.size() > 0)
+      emptyLayout.setVisibility(View.GONE);
 
     worksiteView = view.findViewById(R.id.worksiteView);
     worksiteView.setHasFixedSize(true);

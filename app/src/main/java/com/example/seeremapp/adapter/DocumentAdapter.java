@@ -79,19 +79,16 @@ public class DocumentAdapter extends RecyclerView.Adapter<DocumentAdapter.ViewHo
         @Override
         public void onClick(View view) {
           try {
-            File file = new File(Uri.parse(doc.getPath()).getPath());
 
-            Log.e("test", "exists: " + file.exists());
-            Intent target = new Intent(Intent.ACTION_VIEW);
-            target.setDataAndType(Uri.fromFile(file),"application/pdf");
-            target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri uri = Uri.parse(doc.getPath());
+            Intent open = new Intent(Intent.ACTION_VIEW);
+            open.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            open.setData(uri);
 
-            Intent intent = Intent.createChooser(target, "Open File");
             try {
-              view.getContext().startActivity(intent);
+              view.getContext().startActivity(open);
             } catch (ActivityNotFoundException e) {
-              Toast.makeText(view.getContext(), "You do not have an app to read the following document", Toast.LENGTH_LONG).show();
+              Toast.makeText(view.getContext(), "You do not have a valid app to read the following document", Toast.LENGTH_LONG).show();
             }
           } catch(Exception err) { Log.i("test", err.getMessage()); }
         }

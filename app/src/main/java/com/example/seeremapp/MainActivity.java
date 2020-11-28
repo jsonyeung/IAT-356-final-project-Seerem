@@ -2,17 +2,21 @@ package com.example.seeremapp;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import me.aflak.libraries.callback.FingerprintDialogCallback;
+import me.aflak.libraries.dialog.FingerprintDialog;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.seeremapp.database.containers.User;
 import com.example.seeremapp.database.UserDB;
@@ -67,10 +71,34 @@ public class MainActivity extends AppCompatActivity {
           editor.putBoolean("remember", remember);
           editor.commit();
 
-          // go to user dashboard once logged in successfully
-          Intent i = new Intent(getApplicationContext(), UserDashboardActivity.class);
-          startActivity(i);
-          finish();
+          if (user.getFingerAuth() <= 0) {
+            // go to user dashboard once logged in successfully
+            Intent i = new Intent(getApplicationContext(), UserDashboardActivity.class);
+            startActivity(i);
+            finish();
+
+          } else {
+            // secondary auth required?
+            FingerprintDialog.initialize(view.getContext())
+              .title("Identification")
+              .message("This account requires secondary identification to login.")
+              .callback(new FingerprintDialogCallback() {
+                @Override
+                public void onAuthenticationSucceeded() {
+                  // go to user dashboard once logged in successfully
+                  Intent i = new Intent(getApplicationContext(), UserDashboardActivity.class);
+                  startActivity(i);
+                  finish();
+                }
+
+                @Override
+                public void onAuthenticationCancel() {
+                  Snackbar.make(findViewById(R.id.mainLayout),
+                    "Secondary identification unsuccessful", Snackbar.LENGTH_LONG)
+                    .show();
+                }
+              }).show();
+          }
 
         } catch(Exception err) {
           Log.e("LOGIN", err.getMessage());
@@ -84,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
     registerText.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-      Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-      startActivityForResult(i, LAUNCH_REGISTER);
+        Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+        startActivityForResult(i, LAUNCH_REGISTER);
       }
     });
   }
@@ -93,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onStart() {
     super.onStart();
+
+    Log.i("LOGIN", "remember?: " + sharedPrefs.getBoolean("remember", false));
 
     // auto-login if user checked "remember me"
     if (sharedPrefs.getBoolean("remember", false)) {

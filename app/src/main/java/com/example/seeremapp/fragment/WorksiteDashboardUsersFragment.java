@@ -13,10 +13,13 @@ import android.view.ViewGroup;
 
 import com.example.seeremapp.R;
 import com.example.seeremapp.adapter.UsersAdapter;
+import com.example.seeremapp.database.UserDB;
 import com.example.seeremapp.database.WorksiteDB;
 import com.example.seeremapp.database.containers.User;
 import com.example.seeremapp.database.containers.Worksite;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -65,7 +68,7 @@ public class WorksiteDashboardUsersFragment extends Fragment {
 
     // set references
     usersView = (RecyclerView) view.findViewById(R.id.usersView);
-    usersAdapter = new UsersAdapter(getContext(), users);
+    usersAdapter = new UsersAdapter(getContext(), users, worksite.getId());
     usersLayoutManager = new LinearLayoutManager(getContext());
 
     usersView.setLayoutManager(usersLayoutManager);

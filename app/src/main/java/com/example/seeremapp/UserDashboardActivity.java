@@ -1,7 +1,6 @@
 package com.example.seeremapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,20 +13,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.seeremapp.database.containers.User;
 import com.example.seeremapp.database.UserDB;
 import com.example.seeremapp.database.WorksiteDB;
-import com.example.seeremapp.database.containers.Worksite;
 import com.example.seeremapp.database.helpers.UserHelper;
 import com.example.seeremapp.fragment.UserDashboardHomeFragment;
-import com.example.seeremapp.fragment.UserProfileFragment;
+import com.example.seeremapp.fragment.UserDashboardProfileFragment;
+import com.example.seeremapp.fragment.UserDashboardSettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -119,9 +116,13 @@ public class UserDashboardActivity extends AppCompatActivity implements Navigati
       case R.id.navUser:
         getSupportActionBar().setTitle("User Profile");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
-          new UserProfileFragment(email, true)).commit();
+          new UserDashboardProfileFragment(email, true)).commit();
         break;
-      default: break;
+      case R.id.navSettings:
+        getSupportActionBar().setTitle("Settings");
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
+          new UserDashboardSettingsFragment()).commit();
+        break;
     }
 
     drawer.closeDrawer(GravityCompat.START);
